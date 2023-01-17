@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Persistense;
 
-namespace Persistence
+namespace Persistense
 {
     public class Seed
     {
