@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Header, List } from "semantic-ui-react";
-import Button from "semantic-ui-react/dist/commonjs/elements/Button";
+import { Container } from "semantic-ui-react";
 import { Activity } from "../models/activity";
 import NavBar from "./NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
