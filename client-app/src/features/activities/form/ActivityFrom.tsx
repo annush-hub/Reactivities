@@ -9,6 +9,8 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import MyTextInput from "../../../app/common/form/MyTextInput";
 import MyTextArea from "../../../app/common/form/MyTextArea";
+import { categoryOptions } from "../../../app/common/options/categoryOptions";
+import MySelectInput from "../../../app/common/form/MySelectInput";
 export default observer(function ActivityFrom() {
   const { activityStore } = useStore();
   const { loading, loadActivity, loadingInitilal } = activityStore;
@@ -55,7 +57,11 @@ export default observer(function ActivityFrom() {
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
             <MyTextInput name="title" placeholder="Title"></MyTextInput>
             <MyTextArea rows={3} placeholder="Description" name="description" />
-            <MyTextInput placeholder="Category" name="category" />
+            <MySelectInput
+              options={categoryOptions}
+              placeholder="Category"
+              name="category"
+            />
             <MyTextInput placeholder="Date" name="date" />
             <MyTextInput placeholder="City" name="city" />
             <MyTextInput placeholder="Venue" name="venue" />
