@@ -25,7 +25,7 @@ export default observer(function ActivityFrom() {
     title: "",
     category: "",
     description: "",
-    date: "",
+    date: null,
     city: "",
     venue: "",
   });
