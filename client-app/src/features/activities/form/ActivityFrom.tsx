@@ -8,7 +8,7 @@ import { useStore } from "../../../app/stores/store";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import MyTextInput from "../../../app/common/form/MyTextInput";
-import MyTextArea from "../../../app/common/MyTextArea";
+import MyTextArea from "../../../app/common/form/MyTextArea";
 export default observer(function ActivityFrom() {
   const { activityStore } = useStore();
   const { loading, loadActivity, loadingInitilal } = activityStore;
