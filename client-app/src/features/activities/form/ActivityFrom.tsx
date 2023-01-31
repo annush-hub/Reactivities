@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, Segment } from "semantic-ui-react";
+import { Button, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Activity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
@@ -12,9 +12,17 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import MyDateInput from "../../../app/common/form/MyDateInput";
+import { v4 as uuid } from "uuid";
+
 export default observer(function ActivityFrom() {
   const { activityStore } = useStore();
-  const { loading, loadActivity, loadingInitilal } = activityStore;
+  const {
+    loading,
+    loadActivity,
+    loadingInitilal,
+    createActivity,
+    editActivity,
+  } = activityStore;
 
   const { id } = useParams();
 
@@ -34,11 +42,22 @@ export default observer(function ActivityFrom() {
     if (id) loadActivity(id).then((activity) => setActivity(activity!));
   }, [id, loadActivity]);
 
+  function handleFormSubmit(activity: Activity) {
+    if (!activity.id) {
+      activity.id = uuid();
+      createActivity(activity).then(() =>
+        navigate(`/activities/${activity.id}`)
+      );
+    } else {
+      editActivity(activity).then(() => navigate(`/activities/${activity.id}`));
+    }
+  }
+
   const validationSchema = Yup.object({
     title: Yup.string().required("The activity title is required!"),
     description: Yup.string().required("The activity description is required!"),
     category: Yup.string().required("The activity category is required!"),
-    date: Yup.string().required("The activity date is required!"),
+    date: Yup.string().required("The activity date is required!").nullable(),
     city: Yup.string().required("The activity city is required!"),
     venue: Yup.string().required("The activity venue is required!"),
   });
@@ -48,13 +67,14 @@ export default observer(function ActivityFrom() {
 
   return (
     <Segment clearing>
+      <Header content="Activity Details" sub color="teal" />
       <Formik
         validationSchema={validationSchema}
         enableReinitialize
         initialValues={activity}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => handleFormSubmit(values)}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, isValid, isSubmitting, dirty }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
             <MyTextInput name="title" placeholder="Title"></MyTextInput>
             <MyTextArea rows={3} placeholder="Description" name="description" />
@@ -70,9 +90,11 @@ export default observer(function ActivityFrom() {
               timeCaption="time"
               dateFormat="MMMM d, yyyy, h:mm aa"
             />
+            <Header content="Location Details" sub color="teal" />
             <MyTextInput placeholder="City" name="city" />
             <MyTextInput placeholder="Venue" name="venue" />
             <Button
+              disabled={isSubmitting || !dirty || !isValid}
               loading={loading}
               floated="right"
               positive
