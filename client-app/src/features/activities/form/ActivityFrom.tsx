@@ -11,6 +11,7 @@ import MyTextInput from "../../../app/common/form/MyTextInput";
 import MyTextArea from "../../../app/common/form/MyTextArea";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
 import MySelectInput from "../../../app/common/form/MySelectInput";
+import MyDateInput from "../../../app/common/form/MyDateInput";
 export default observer(function ActivityFrom() {
   const { activityStore } = useStore();
   const { loading, loadActivity, loadingInitilal } = activityStore;
@@ -62,7 +63,13 @@ export default observer(function ActivityFrom() {
               placeholder="Category"
               name="category"
             />
-            <MyTextInput placeholder="Date" name="date" />
+            <MyDateInput
+              placeholderText="Date"
+              name="date"
+              showTimeSelect
+              timeCaption="time"
+              dateFormat="MMMM d, yyyy, h:mm aa"
+            />
             <MyTextInput placeholder="City" name="city" />
             <MyTextInput placeholder="Venue" name="venue" />
             <Button
