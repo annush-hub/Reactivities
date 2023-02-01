@@ -1,7 +1,10 @@
 ﻿using API.Services;
 using Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Persistense;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace API.Extensions
 {
@@ -15,7 +18,22 @@ namespace API.Extensions
                 opt.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<DataContext>();
 
-            services.AddAuthentication();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("victors secret 12345678"));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt => 
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+
+                    };
+                });
+
+
             services.AddScoped<TokenService>();
 
             return services; 
