@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using API.Services;
+using Domain;
 using Persistense;
 using System.Runtime.CompilerServices;
 
@@ -15,6 +16,7 @@ namespace API.Extensions
             }).AddEntityFrameworkStores<DataContext>();
 
             services.AddAuthentication();
+            services.AddScoped<TokenService>();
 
             return services; 
         }
