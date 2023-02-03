@@ -10,6 +10,7 @@ using System.Security.Cryptography.Xml;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
 
