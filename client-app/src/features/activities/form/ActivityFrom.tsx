@@ -1,11 +1,11 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import { Activity, ActivityFormValues } from "../../../app/models/activity";
+import { ActivityFormValues } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MyTextInput from "../../../app/common/form/MyTextInput";
 import MyTextArea from "../../../app/common/form/MyTextArea";
@@ -16,13 +16,8 @@ import { v4 as uuid } from "uuid";
 
 export default observer(function ActivityFrom() {
   const { activityStore } = useStore();
-  const {
-    loading,
-    loadActivity,
-    loadingInitilal,
-    createActivity,
-    editActivity,
-  } = activityStore;
+  const { loadActivity, loadingInitilal, createActivity, editActivity } =
+    activityStore;
 
   const { id } = useParams();
 

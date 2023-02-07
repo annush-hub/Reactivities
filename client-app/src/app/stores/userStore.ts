@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { couldStartTrivia } from "typescript";
 import agent from "../api/agent";
 import { User, UserFormValues } from "../models/user";
 import { router } from "../router/Routes";
