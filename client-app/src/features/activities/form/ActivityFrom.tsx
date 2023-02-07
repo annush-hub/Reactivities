@@ -3,7 +3,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import { Activity } from "../../../app/models/activity";
+import { Activity, ActivityFormValues } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -28,30 +28,9 @@ export default observer(function ActivityFrom() {
 
   const navigate = useNavigate();
 
-  const [activity, setActivity] = useState<Activity>({
-    id: "",
-    title: "",
-    category: "",
-    description: "",
-    date: null,
-    city: "",
-    venue: "",
-  });
-
-  useEffect(() => {
-    if (id) loadActivity(id).then((activity) => setActivity(activity!));
-  }, [id, loadActivity]);
-
-  function handleFormSubmit(activity: Activity) {
-    if (!activity.id) {
-      activity.id = uuid();
-      createActivity(activity).then(() =>
-        navigate(`/activities/${activity.id}`)
-      );
-    } else {
-      editActivity(activity).then(() => navigate(`/activities/${activity.id}`));
-    }
-  }
+  const [activity, setActivity] = useState<ActivityFormValues>(
+    new ActivityFormValues()
+  );
 
   const validationSchema = Yup.object({
     title: Yup.string().required("The activity title is required!"),
@@ -61,6 +40,24 @@ export default observer(function ActivityFrom() {
     city: Yup.string().required("The activity city is required!"),
     venue: Yup.string().required("The activity venue is required!"),
   });
+
+  useEffect(() => {
+    if (id)
+      loadActivity(id).then((activity) =>
+        setActivity(new ActivityFormValues(activity))
+      );
+  }, [id, loadActivity]);
+
+  function handleFormSubmit(activity: ActivityFormValues) {
+    if (!activity.id) {
+      activity.id = uuid();
+      createActivity(activity).then(() =>
+        navigate(`/activities/${activity.id}`)
+      );
+    } else {
+      editActivity(activity).then(() => navigate(`/activities/${activity.id}`));
+    }
+  }
 
   if (loadingInitilal)
     return <LoadingComponent content="Loading activity..." />;
@@ -95,7 +92,7 @@ export default observer(function ActivityFrom() {
             <MyTextInput placeholder="Venue" name="venue" />
             <Button
               disabled={isSubmitting || !dirty || !isValid}
-              loading={loading}
+              loading={isSubmitting}
               floated="right"
               positive
               type="submit"
