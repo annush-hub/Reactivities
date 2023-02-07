@@ -42,7 +42,23 @@ export default function ActivityListItem({ activity }: Props) {
               <Item.Header as={Link} to={`/activities/${activity.id}`}>
                 {activity.title}
               </Item.Header>
-              <Item.Description>Hostet by Bob</Item.Description>
+              <Item.Description>
+                Hostet by {activity.host?.displayName}
+              </Item.Description>
+              {activity.isHost && (
+                <Item.Description>
+                  <Label basic color="orange">
+                    You're hosting this activity
+                  </Label>
+                </Item.Description>
+              )}
+              {activity.isGoing && !activity.isHost && (
+                <Item.Description>
+                  <Label basic color="green">
+                    You're going to this activity
+                  </Label>
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </ItemGroup>
