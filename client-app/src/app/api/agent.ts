@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosHeaders, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { Activity, ActivityFormValues } from "../models/activity";
+import { Profile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
@@ -22,16 +23,6 @@ axios.interceptors.request.use((config) => {
   }
   return config;
 });
-
-// axios.interceptors.response.use(async (response) => {
-//   try {
-//     await sleep(1000);
-//     return response;
-//   } catch (error) {
-//     console.log(error);
-//     return await Promise.reject(error);
-//   }
-// });
 
 axios.interceptors.response.use(
   async (response) => {
@@ -101,9 +92,14 @@ const Account = {
     requests.post<User>("/account/register", user),
 };
 
+const Profiles = {
+  get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+};
+
 const agent = {
   Activities,
   Account,
+  Profiles,
 };
 
 export default agent;
