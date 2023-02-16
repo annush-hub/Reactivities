@@ -48,6 +48,7 @@ namespace Application.Profiles
                 user.Bio = request.Bio ?? user.Bio;
                 user.DisplayName = request.DisplayName ?? user.DisplayName;
 
+                _context.Entry(user).State = EntityState.Modified;
 
                 var result = await _context.SaveChangesAsync() > 0;
                 if (!result) return Result<Unit>.Failure("Failed to edit the profile");
