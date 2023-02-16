@@ -1,8 +1,16 @@
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
-import { Button, Card, Grid, Header, Image, Tab } from "semantic-ui-react";
+import React, { SyntheticEvent, useState } from "react";
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Grid,
+  Header,
+  Image,
+  Tab,
+} from "semantic-ui-react";
 import PhotoUploadWidget from "../../app/common/imageUpload/PhotoUploadWidget";
-import { Profile } from "../../app/models/profile";
+import { Photo, Profile } from "../../app/models/profile";
 import { useStore } from "../../app/stores/store";
 
 interface Props {
@@ -11,12 +19,27 @@ interface Props {
 
 export default observer(function ProfilePhotos({ profile }: Props) {
   const {
-    profileStore: { isCurrentUser, uploadPhoto, uploading },
+    profileStore: {
+      isCurrentUser,
+      uploadPhoto,
+      uploading,
+      loading,
+      setMainPhoto,
+    },
   } = useStore();
   const [addPhotoMode, setAddPhotoMode] = useState(false);
+  const [target, setTarget] = useState("");
 
   function handlePhotoUpload(file: Blob) {
     uploadPhoto(file).then(() => setAddPhotoMode(false));
+  }
+
+  function handleSetMainPhoto(
+    photo: Photo,
+    e: SyntheticEvent<HTMLButtonElement>
+  ) {
+    setTarget(e.currentTarget.name);
+    setMainPhoto(photo);
   }
 
   return (
@@ -44,6 +67,20 @@ export default observer(function ProfilePhotos({ profile }: Props) {
               {profile.photos?.map((photo) => (
                 <Card key={photo.id}>
                   <Image src={photo.url} />
+                  {isCurrentUser && (
+                    <ButtonGroup fluid widths={2}>
+                      <Button
+                        basic
+                        color="green"
+                        content="Main"
+                        name={photo.id}
+                        disabled={photo.isMain}
+                        loading={target === photo.id && loading}
+                        onClick={(e) => handleSetMainPhoto(photo, e)}
+                      />
+                      <Button basic color="red" icon="trash" content="Delete" />
+                    </ButtonGroup>
+                  )}
                 </Card>
               ))}
             </Card.Group>
